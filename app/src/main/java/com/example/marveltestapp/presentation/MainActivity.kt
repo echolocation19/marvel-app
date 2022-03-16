@@ -4,8 +4,8 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import com.example.marveltestapp.databinding.ActivityMainBinding
-import com.example.marveltestapp.domain.Character
 import com.example.marveltestapp.presentation.adapters.CharacterItemsAdapter
 import java.lang.RuntimeException
 
@@ -19,18 +19,22 @@ class MainActivity : AppCompatActivity() {
     private val characterListAdapter: CharacterItemsAdapter
     get() = _characterListAdapter ?: throw RuntimeException("CharacterItemsAdapter == null")
 
-    private val charactersViewModel: CharactersViewModel by viewModels()
+    private val viewModelFactory by lazy {
+        CharactersViewModelFactory(application)
+    }
+
+    private val viewModel by lazy {
+        ViewModelProvider(this, viewModelFactory)[CharactersViewModel::class.java]
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         _binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setupRecyclerView()
-        charactersViewModel.shopListLiveData.observe(this, Observer {
+        viewModel.charactersList.observe(this) {
             characterListAdapter.submitList(it)
-        })
-        // access to key
-        //BuildConfig.API_PRIVATE_KEY
+        }
     }
 
     private fun setupRecyclerView() {

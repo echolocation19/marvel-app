@@ -5,8 +5,8 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "all_characters_list")
 data class CharacterDbModel(
-    @PrimaryKey
-    val id: Int = 0,
     val name: String,
+    @PrimaryKey(autoGenerate = false)
     val characterId: Int,
+    val modified: String
 )

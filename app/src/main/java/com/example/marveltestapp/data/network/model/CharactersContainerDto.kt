@@ -1,14 +1,11 @@
 package com.example.marveltestapp.data.network.model
 
-import androidx.room.Entity
-
-@Entity(tableName = "all_characters_list")
-data class CharactersDto(
+data class CharactersContainerDto(
     val attributionHTML: String,
     val attributionText: String,
-    val code: String,
+    val code: Int,
     val copyright: String,
-    val data: DataDto,
+    val data: Data,
     val etag: String,
     val status: String
 )

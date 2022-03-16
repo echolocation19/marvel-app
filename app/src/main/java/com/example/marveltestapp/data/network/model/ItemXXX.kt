@@ -1,6 +1,7 @@
 package com.example.marveltestapp.data.network.model
 
-data class ItemDto(
+data class ItemXXX(
     val name: String,
-    val resourceURI: String
+    val resourceURI: String,
+    val type: String
 )

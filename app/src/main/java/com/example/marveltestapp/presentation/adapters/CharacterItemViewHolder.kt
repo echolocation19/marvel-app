@@ -10,7 +10,7 @@ class CharacterItemViewHolder(
     fun bind(character: Character) {
         binding.apply {
             tvName.text = character.name
-            tvLastUpdate.text = character.lastUpdate
+            tvLastUpdate.text = character.modified
         }
     }
 }

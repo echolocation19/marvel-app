@@ -1,6 +1,6 @@
 package com.example.marveltestapp.data.network.model
 
-data class ThumbnailDto(
+data class Thumbnail(
     val extension: String,
     val path: String
 )
