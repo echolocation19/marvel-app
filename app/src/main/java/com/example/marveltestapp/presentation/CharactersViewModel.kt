@@ -12,8 +12,6 @@ class CharactersViewModel(
     application: Application
 ) : AndroidViewModel(application) {
 
-//    val shopListLiveData = MutableLiveData<List<Character>>()
-
     private val db = CharactersDatabase.getInstance(application)
     private val dao = db.charactersDao()
     private val repository = CharactersRepositoryImpl(dao)
@@ -27,18 +25,4 @@ class CharactersViewModel(
     }
 
     val charactersList = getCharactersListUseCase()
-
-//    init {
-//        val charactersList = listOf(
-//            Character(1, "spider-man", "14.01.02"),
-//            Character(2, "spider-man", "14.01.02"),
-//            Character(3, "spider-man", "14.01.02"),
-//            Character(4, "spider-man", "14.01.02"),
-//            Character(5, "spider-man", "14.01.02"),
-//            Character(6, "spider-man", "14.01.02"),
-//            Character(7, "spider-man", "14.01.02")
-//        )
-//        shopListLiveData.value = charactersList
-//    }
-
 }

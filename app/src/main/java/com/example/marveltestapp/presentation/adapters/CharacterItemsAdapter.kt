@@ -13,6 +13,8 @@ class CharacterItemsAdapter : ListAdapter<Character, CharacterItemViewHolder>(Ch
         const val MAX_POOL_SIZE = 15
     }
 
+    var onCharacterClickListener: ((Character) -> Unit)? = null
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CharacterItemViewHolder {
         val binding = CharacterItemBinding.inflate(
             LayoutInflater.from(parent.context),
@@ -25,5 +27,9 @@ class CharacterItemsAdapter : ListAdapter<Character, CharacterItemViewHolder>(Ch
     override fun onBindViewHolder(holder: CharacterItemViewHolder, position: Int) {
         val currentCharacter = getItem(position)
         holder.bind(currentCharacter)
+        val binding = holder.binding
+        binding.root.setOnClickListener {
+            onCharacterClickListener?.invoke(currentCharacter)
+        }
     }
 }

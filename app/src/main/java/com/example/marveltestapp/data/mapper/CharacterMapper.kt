@@ -31,4 +31,9 @@ class CharacterMapper {
         }
         return result
     }
+
+    fun convertStringToTimestamp(date: String): String {
+        
+    }
+
 }

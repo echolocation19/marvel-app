@@ -3,8 +3,10 @@ package com.example.marveltestapp.presentation
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.activity.viewModels
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import com.example.marveltestapp.R
 import com.example.marveltestapp.databinding.ActivityMainBinding
 import com.example.marveltestapp.presentation.adapters.CharacterItemsAdapter
 import java.lang.RuntimeException
@@ -32,10 +34,33 @@ class MainActivity : AppCompatActivity() {
         _binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setupRecyclerView()
+        setupItemClick()
         viewModel.charactersList.observe(this) {
             characterListAdapter.submitList(it)
         }
     }
+
+    private fun setupItemClick() {
+        characterListAdapter.onCharacterClickListener = {
+            if (isOnePaneMode()) {
+                val intent = CharacterItemActivity.newInstance(this, it.characterId)
+                startActivity(intent)
+            } else {
+                launchFragment(CharacterItemFragment.newInstance(it.characterId))
+            }
+        }
+    }
+
+    private fun launchFragment(fragment: Fragment) {
+        supportFragmentManager.popBackStack()
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.characterItemContainer, fragment)
+            .addToBackStack(null)
+            .commit()
+    }
+
+    private fun isOnePaneMode() =
+        binding.characterItemContainer == null
 
     private fun setupRecyclerView() {
         _characterListAdapter = CharacterItemsAdapter()

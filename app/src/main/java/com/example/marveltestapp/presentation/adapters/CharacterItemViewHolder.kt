@@ -5,7 +5,7 @@ import com.example.marveltestapp.databinding.CharacterItemBinding
 import com.example.marveltestapp.domain.Character
 
 class CharacterItemViewHolder(
-    private val binding: CharacterItemBinding
+    val binding: CharacterItemBinding
 ): RecyclerView.ViewHolder(binding.root) {
     fun bind(character: Character) {
         binding.apply {
