@@ -13,6 +13,7 @@
         android:theme="@style/Theme.MarvelTestApp">
         <activity
             android:name=".presentation.CharacterItemActivity"
+            android:parentActivityName=".presentation.MainActivity"
             android:exported="false" />
         <activity
             android:name=".presentation.MainActivity"

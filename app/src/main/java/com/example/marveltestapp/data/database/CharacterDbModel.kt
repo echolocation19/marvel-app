@@ -8,5 +8,6 @@ data class CharacterDbModel(
     val name: String,
     @PrimaryKey(autoGenerate = false)
     val characterId: Int,
-    val modified: String
+    val modified: String,
+    val thumbnail: String
 )

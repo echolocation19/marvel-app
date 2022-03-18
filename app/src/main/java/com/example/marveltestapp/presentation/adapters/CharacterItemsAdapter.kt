@@ -1,12 +1,13 @@
 package com.example.marveltestapp.presentation.adapters
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import com.example.marveltestapp.databinding.CharacterItemBinding
 import com.example.marveltestapp.domain.Character
 
-class CharacterItemsAdapter : ListAdapter<Character, CharacterItemViewHolder>(CharacterItemDiffCallback()) {
+class CharacterItemsAdapter(private val context: Context) : ListAdapter<Character, CharacterItemViewHolder>(CharacterItemDiffCallback()) {
 
     companion object {
         const val VIEW_TYPE = 0
@@ -21,7 +22,7 @@ class CharacterItemsAdapter : ListAdapter<Character, CharacterItemViewHolder>(Ch
             parent,
             false
         )
-        return CharacterItemViewHolder(binding)
+        return CharacterItemViewHolder(context, binding)
     }
 
     override fun onBindViewHolder(holder: CharacterItemViewHolder, position: Int) {

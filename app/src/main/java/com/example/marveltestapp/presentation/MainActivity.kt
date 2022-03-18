@@ -2,16 +2,20 @@ package com.example.marveltestapp.presentation
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import androidx.activity.viewModels
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.marveltestapp.R
 import com.example.marveltestapp.databinding.ActivityMainBinding
 import com.example.marveltestapp.presentation.adapters.CharacterItemsAdapter
+import com.example.marveltestapp.presentation.viewmodel.CharactersViewModel
+import com.example.marveltestapp.presentation.viewmodel.CharactersViewModelFactory
 import java.lang.RuntimeException
 
 class MainActivity : AppCompatActivity() {
+
+//    interface OnBackPressed {
+//        fun onBackPressed()
+//    }
 
     private var _binding: ActivityMainBinding? = null
     private val binding: ActivityMainBinding
@@ -63,7 +67,7 @@ class MainActivity : AppCompatActivity() {
         binding.characterItemContainer == null
 
     private fun setupRecyclerView() {
-        _characterListAdapter = CharacterItemsAdapter()
+        _characterListAdapter = CharacterItemsAdapter(applicationContext)
         with(binding.rvCharactersList) {
             adapter = characterListAdapter
             recycledViewPool.setMaxRecycledViews(
@@ -72,4 +76,19 @@ class MainActivity : AppCompatActivity() {
             )
         }
     }
+
+//    override fun onBackPressed() {
+//        notifyFragment()
+//        super.onBackPressed()
+//    }
+//
+//    private fun notifyFragment() {
+//        val fragments = supportFragmentManager.fragments
+//        for (f in fragments) {
+//            if (f != null)
+//                (f as CharacterItemFragment).onBackPressed()
+//        }
+//    }
+
+
 }

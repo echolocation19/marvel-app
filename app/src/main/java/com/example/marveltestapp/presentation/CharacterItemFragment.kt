@@ -7,6 +7,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import com.example.marveltestapp.databinding.FragmentCharacterItemBinding
+import com.example.marveltestapp.domain.Character
+import com.example.marveltestapp.presentation.viewmodel.CharactersViewModel
+import com.example.marveltestapp.presentation.viewmodel.CharactersViewModelFactory
 import java.lang.RuntimeException
 
 class CharacterItemFragment : Fragment() {
@@ -23,7 +26,6 @@ class CharacterItemFragment : Fragment() {
         ViewModelProvider(this, charactersViewModelFactory)[CharactersViewModel::class.java]
     }
 
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -34,8 +36,18 @@ class CharacterItemFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        val characterId = getCharacterId()
+        charactersViewModel.getCharacterById(characterId).observe(viewLifecycleOwner) {
+            setCharacterInfo(it)
+        }
+
     }
 
+    private fun setCharacterInfo(character: Character) {
+        with (binding) {
+            tvName.text = character.name
+        }
+    }
 
     private fun getCharacterId(): Int =
         requireArguments().getInt(CHARACTER_ITEM_ID, CHARACTER_EMPTY_ID)
@@ -53,4 +65,8 @@ class CharacterItemFragment : Fragment() {
                 }
             }
     }
+
+//    override fun onBackPressed() {
+//        activity?.supportFragmentManager?.popBackStack()
+//    }
 }

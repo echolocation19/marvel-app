@@ -1,8 +1,10 @@
 package com.example.marveltestapp.data.mapper
 
+import android.util.Log
 import com.example.marveltestapp.data.database.CharacterDbModel
 import com.example.marveltestapp.data.network.model.CharactersContainerDto
 import com.example.marveltestapp.data.network.model.ResultDto
+import com.example.marveltestapp.data.network.model.Thumbnail
 import com.example.marveltestapp.domain.Character
 import java.lang.StringBuilder
 import java.time.LocalDate
@@ -15,14 +17,16 @@ class CharacterMapper {
         CharacterDbModel(
             name = dto.name,
             characterId = dto.characterId,
-            modified = convertStringToTimestamp(dto.modified)
+            modified = convertStringToTimestamp(dto.modified),
+            thumbnail = provideThumbnail(dto.thumbnail)
         )
 
     fun mapDbModelToEntity(dbModel: CharacterDbModel): Character =
         Character(
             name = dbModel.name,
             characterId = dbModel.characterId,
-            modified = dbModel.modified
+            modified = dbModel.modified,
+            thumbnail = dbModel.thumbnail
         )
 
     fun mapCharactersContainerToListResult(container: CharactersContainerDto)
@@ -40,9 +44,14 @@ class CharacterMapper {
             DateTimeFormatter.ofPattern(INPUT_DATE_TIME_FORMAT, Locale.ENGLISH)
         val outputFormatter = DateTimeFormatter.ofPattern(OUTPUT_DATE_TIME_FORMAT, Locale.ENGLISH)
         val mDate = LocalDate.parse(date, inputFormatter)
-        return StringBuilder()
-            .append("Last updated: ")
-            .append(outputFormatter.format(mDate)).toString()
+        return outputFormatter.format(mDate)
+    }
+
+    private fun provideThumbnail(thumbnail: Thumbnail): String {
+        val refactoredThumbnail = StringBuilder(thumbnail.path).apply {
+            insert(4, "s")
+        }.toString()
+        return refactoredThumbnail + "." + thumbnail.extension
     }
 
     companion object {
