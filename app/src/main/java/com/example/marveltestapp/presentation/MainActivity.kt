@@ -47,10 +47,10 @@ class MainActivity : AppCompatActivity() {
     private fun setupItemClick() {
         characterListAdapter.onCharacterClickListener = {
             if (isOnePaneMode()) {
-                val intent = CharacterItemActivity.newInstance(this, it.characterId)
+                val intent = CharacterItemActivity.newInstance(this, it.id)
                 startActivity(intent)
             } else {
-                launchFragment(CharacterItemFragment.newInstance(it.characterId))
+                launchFragment(CharacterItemFragment.newInstance(it.id))
             }
         }
     }

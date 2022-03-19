@@ -1,7 +1,7 @@
 package com.example.marveltestapp.data.mapper
 
-import android.util.Log
 import com.example.marveltestapp.data.database.CharacterDbModel
+import com.example.marveltestapp.data.database.CharacterInfoDbModel
 import com.example.marveltestapp.data.network.model.CharactersContainerDto
 import com.example.marveltestapp.data.network.model.ResultDto
 import com.example.marveltestapp.data.network.model.Thumbnail
@@ -16,7 +16,15 @@ class CharacterMapper {
     fun mapDtoToDbModel(dto: ResultDto): CharacterDbModel =
         CharacterDbModel(
             name = dto.name,
-            characterId = dto.characterId,
+            id = dto.id,
+            modified = convertStringToTimestamp(dto.modified),
+            thumbnail = provideThumbnail(dto.thumbnail)
+        )
+
+    fun mapDtoToDbInfoModel(dto: ResultDto): CharacterInfoDbModel =
+        CharacterInfoDbModel(
+            name = dto.name,
+            id = dto.id,
             modified = convertStringToTimestamp(dto.modified),
             thumbnail = provideThumbnail(dto.thumbnail)
         )
@@ -24,10 +32,19 @@ class CharacterMapper {
     fun mapDbModelToEntity(dbModel: CharacterDbModel): Character =
         Character(
             name = dbModel.name,
-            characterId = dbModel.characterId,
+            id = dbModel.id,
             modified = dbModel.modified,
             thumbnail = dbModel.thumbnail
         )
+
+    fun mapDbInfoModelToEntity(dbModel: CharacterInfoDbModel): Character =
+        Character(
+            name = dbModel.name,
+            id = dbModel.id,
+            modified = dbModel.modified,
+            thumbnail = dbModel.thumbnail
+        )
+
 
     fun mapCharactersContainerToListResult(container: CharactersContainerDto)
             : List<ResultDto> {

@@ -8,8 +8,13 @@ import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import com.example.marveltestapp.databinding.FragmentCharacterItemBinding
 import com.example.marveltestapp.domain.Character
+import com.example.marveltestapp.presentation.viewmodel.CharacterViewModel
+import com.example.marveltestapp.presentation.viewmodel.CharacterViewModelFactory
 import com.example.marveltestapp.presentation.viewmodel.CharactersViewModel
 import com.example.marveltestapp.presentation.viewmodel.CharactersViewModelFactory
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.withContext
 import java.lang.RuntimeException
 
 class CharacterItemFragment : Fragment() {
@@ -18,12 +23,12 @@ class CharacterItemFragment : Fragment() {
     private val binding: FragmentCharacterItemBinding
         get() = _binding ?: throw RuntimeException("FragmentCharacterItemBinding == null")
 
-    private val charactersViewModelFactory by lazy {
-        CharactersViewModelFactory(requireActivity().application)
+    private val characterViewModelFactory by lazy {
+        CharacterViewModelFactory(requireActivity().application, getCharacterId())
     }
 
-    private val charactersViewModel by lazy {
-        ViewModelProvider(this, charactersViewModelFactory)[CharactersViewModel::class.java]
+    private val characterViewModel by lazy {
+        ViewModelProvider(this, characterViewModelFactory)[CharacterViewModel::class.java]
     }
 
     override fun onCreateView(
@@ -36,8 +41,7 @@ class CharacterItemFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val characterId = getCharacterId()
-        charactersViewModel.getCharacterById(characterId).observe(viewLifecycleOwner) {
+        characterViewModel.getCharacter().observe(viewLifecycleOwner) {
             setCharacterInfo(it)
         }
 
@@ -52,6 +56,11 @@ class CharacterItemFragment : Fragment() {
     private fun getCharacterId(): Int =
         requireArguments().getInt(CHARACTER_ITEM_ID, CHARACTER_EMPTY_ID)
 
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
+    }
+
     companion object {
 
         private const val CHARACTER_ITEM_ID = "id"
@@ -65,8 +74,4 @@ class CharacterItemFragment : Fragment() {
                 }
             }
     }
-
-//    override fun onBackPressed() {
-//        activity?.supportFragmentManager?.popBackStack()
-//    }
 }

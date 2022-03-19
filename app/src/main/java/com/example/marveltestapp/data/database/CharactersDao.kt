@@ -12,10 +12,13 @@ interface CharactersDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertCharactersList(list: List<CharacterDbModel>)
 
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertCharacter(character: CharacterInfoDbModel)
+
     @Query("SELECT * FROM all_characters_list")
     fun getCharactersList(): LiveData<List<CharacterDbModel>>
 
-    @Query("SELECT * FROM all_characters_list WHERE characterId == :id LIMIT 1")
-    fun getCharacter(id: Int): LiveData<CharacterDbModel>
+    @Query("SELECT * FROM all_characters_list WHERE id = :id LIMIT 1")
+    fun getCharacter(id: Int): LiveData<CharacterInfoDbModel>
 
 }

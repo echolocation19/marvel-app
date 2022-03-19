@@ -9,7 +9,7 @@ data class ResultDto(
     val events: Events,
     @SerializedName("id")
     @Expose
-    val characterId: Int,
+    val id: Int,
     val modified: String,
     val name: String,
     val resourceURI: String,
