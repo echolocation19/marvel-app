@@ -16,12 +16,13 @@ interface ApiService {
         @Query(QUERY_PARAM_API_KEY) apiKey: String = BuildConfig.API_PUBLIC_KEY,
         @Query(QUERY_PARAM_HASH) hash: String =
             getHashParam(),
+        @Query(QUERY_PARAM_LIMIT) limit: String = PARAM_LIMIT,
     ): CharactersContainerDto
 
     @GET("/v1/public/characters/{id}")
     suspend fun getCharacterById(
         @Query(QUERY_PARAM_TS) ts: String = System.currentTimeMillis().toString(),
-        @Query(QUERY_PARAM_API_KEY) apiKey: String = BuildConfig.API_PUBLIC_KEY,
+        @Query(QUERY_PARAM_API_KEY) apiKey: String = BuildConfig.API_PRIVATE_KEY,
         @Query(QUERY_PARAM_HASH) hash: String =
             getHashParam(),
         @Path(PATH_PARAM_CHARACTER_ID) id: Int
@@ -33,6 +34,8 @@ interface ApiService {
         private const val PATH_PARAM_CHARACTER_ID = "characterId"
         private const val QUERY_PARAM_TS = "ts"
         private const val QUERY_PARAM_HASH = "hash"
+        private const val QUERY_PARAM_LIMIT = "limit"
+        private const val PARAM_LIMIT = "100"
 
         private fun ByteArray.toHex() = joinToString(separator = "") { byte -> "%02x".format(byte) }
 
