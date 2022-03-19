@@ -1,5 +1,6 @@
 package com.example.marveltestapp.data.repository
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
 import com.example.marveltestapp.data.database.CharactersDao
@@ -22,6 +23,13 @@ class CharactersRepositoryImpl(
         charactersDao.insertCharactersList(resultList)
     }
 
+    suspend fun loadCharacterById(id: Int) {
+        val dto = apiService.getCharacterById(id)
+        val character = mapper.mapCharactersContainerToListResult(dto)
+        val result = character.map { mapper.mapDtoToDbInfoModel(it) }
+        charactersDao.insertCharacter(result[0])
+    }
+
     override fun getCharactersList(): LiveData<List<Character>> {
         val charactersList = charactersDao.getCharactersList()
         return Transformations.map(charactersList) {
@@ -34,7 +42,7 @@ class CharactersRepositoryImpl(
     override fun getCharacterById(id: Int): LiveData<Character> {
         val character = charactersDao.getCharacter(id)
         return Transformations.map(character) {
-            mapper.mapDbModelToEntity(it)
+            mapper.mapDbInfoModelToEntity(it)
         }
     }
 

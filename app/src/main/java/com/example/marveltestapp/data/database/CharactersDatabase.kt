@@ -6,8 +6,8 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 
 @Database(
-    entities = [CharacterDbModel::class],
-    version = 3,
+    entities = [CharacterDbModel::class, CharacterInfoDbModel::class],
+    version = 7,
     exportSchema = false
 )
 abstract class CharactersDatabase: RoomDatabase() {

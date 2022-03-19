@@ -12,37 +12,45 @@ interface ApiService {
 
     @GET("/v1/public/characters")
     suspend fun getAllCharacters(
-        @Query(QUERY_PARAM_TS) ts: String = System.currentTimeMillis().toString(),
+        @Query(QUERY_PARAM_TS) ts: String = tsProperty,
         @Query(QUERY_PARAM_API_KEY) apiKey: String = BuildConfig.API_PUBLIC_KEY,
         @Query(QUERY_PARAM_HASH) hash: String =
-            getHashParam(),
+            getHashParam(tsProperty),
         @Query(QUERY_PARAM_LIMIT) limit: String = PARAM_LIMIT,
     ): CharactersContainerDto
 
     @GET("/v1/public/characters/{id}")
     suspend fun getCharacterById(
-        @Query(QUERY_PARAM_TS) ts: String = System.currentTimeMillis().toString(),
-        @Query(QUERY_PARAM_API_KEY) apiKey: String = BuildConfig.API_PRIVATE_KEY,
+        @Path(PATH_PARAM_CHARACTER_ID) id: Int,
+        @Query(QUERY_PARAM_TS) ts: String = tsInfoProperty,
+        @Query(QUERY_PARAM_API_KEY) apiKey: String = BuildConfig.API_PUBLIC_KEY,
         @Query(QUERY_PARAM_HASH) hash: String =
-            getHashParam(),
-        @Path(PATH_PARAM_CHARACTER_ID) id: Int
+            getHashParam(tsInfoProperty)
     ): CharactersContainerDto
 
 
     companion object {
         private const val QUERY_PARAM_API_KEY = "apikey"
-        private const val PATH_PARAM_CHARACTER_ID = "characterId"
+        private const val PATH_PARAM_CHARACTER_ID = "id"
         private const val QUERY_PARAM_TS = "ts"
         private const val QUERY_PARAM_HASH = "hash"
         private const val QUERY_PARAM_LIMIT = "limit"
         private const val PARAM_LIMIT = "100"
+
+        private val tsProperty by lazy {
+            System.currentTimeMillis().toString()
+        }
+
+        private val tsInfoProperty by lazy {
+            System.currentTimeMillis().toString()
+        }
 
         private fun ByteArray.toHex() = joinToString(separator = "") { byte -> "%02x".format(byte) }
 
         private fun md5(str: String): ByteArray =
             MessageDigest.getInstance("MD5").digest(str.toByteArray(UTF_8))
 
-        private fun getHashParam() = md5("${System.currentTimeMillis()}${BuildConfig.API_PRIVATE_KEY}${BuildConfig.API_PUBLIC_KEY}").toHex()
+        private fun getHashParam(ts: String) = md5("${ts}${BuildConfig.API_PRIVATE_KEY}${BuildConfig.API_PUBLIC_KEY}").toHex()
 
     }
 
