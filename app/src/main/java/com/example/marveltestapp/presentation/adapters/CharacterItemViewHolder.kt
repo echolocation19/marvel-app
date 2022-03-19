@@ -1,9 +1,7 @@
 package com.example.marveltestapp.presentation.adapters
 
 import android.content.Context
-import android.util.Log
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 import com.example.marveltestapp.R
 import com.example.marveltestapp.databinding.CharacterItemBinding
 import com.example.marveltestapp.domain.Character

@@ -13,17 +13,13 @@ import java.lang.RuntimeException
 
 class MainActivity : AppCompatActivity() {
 
-//    interface OnBackPressed {
-//        fun onBackPressed()
-//    }
-
     private var _binding: ActivityMainBinding? = null
     private val binding: ActivityMainBinding
-    get() = _binding ?: throw RuntimeException("ActivityMainBinding == null")
+        get() = _binding ?: throw RuntimeException("ActivityMainBinding == null")
 
     private var _characterListAdapter: CharacterItemsAdapter? = null
     private val characterListAdapter: CharacterItemsAdapter
-    get() = _characterListAdapter ?: throw RuntimeException("CharacterItemsAdapter == null")
+        get() = _characterListAdapter ?: throw RuntimeException("CharacterItemsAdapter == null")
 
     private val viewModelFactory by lazy {
         CharactersViewModelFactory(application)
@@ -76,19 +72,4 @@ class MainActivity : AppCompatActivity() {
             )
         }
     }
-
-//    override fun onBackPressed() {
-//        notifyFragment()
-//        super.onBackPressed()
-//    }
-//
-//    private fun notifyFragment() {
-//        val fragments = supportFragmentManager.fragments
-//        for (f in fragments) {
-//            if (f != null)
-//                (f as CharacterItemFragment).onBackPressed()
-//        }
-//    }
-
-
 }

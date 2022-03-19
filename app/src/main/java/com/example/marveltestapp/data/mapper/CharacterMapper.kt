@@ -1,12 +1,13 @@
 package com.example.marveltestapp.data.mapper
 
-import com.example.marveltestapp.data.database.CharacterDbModel
-import com.example.marveltestapp.data.database.CharacterInfoDbModel
+import com.example.marveltestapp.data.database.entity.CharacterDbModel
+import com.example.marveltestapp.data.database.entity.CharacterInfoDbModel
 import com.example.marveltestapp.data.network.model.CharactersContainerDto
+import com.example.marveltestapp.data.network.model.Item
 import com.example.marveltestapp.data.network.model.ResultDto
 import com.example.marveltestapp.data.network.model.Thumbnail
 import com.example.marveltestapp.domain.Character
-import java.lang.StringBuilder
+import com.example.marveltestapp.domain.CharacterInfo
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.*
@@ -18,7 +19,8 @@ class CharacterMapper {
             name = dto.name,
             id = dto.id,
             modified = convertStringToTimestamp(dto.modified),
-            thumbnail = provideThumbnail(dto.thumbnail)
+            thumbnail = provideThumbnail(dto.thumbnail),
+            comicsUri = provideComicsName(dto.comics.items)
         )
 
     fun mapDtoToDbInfoModel(dto: ResultDto): CharacterInfoDbModel =
@@ -26,7 +28,8 @@ class CharacterMapper {
             name = dto.name,
             id = dto.id,
             modified = convertStringToTimestamp(dto.modified),
-            thumbnail = provideThumbnail(dto.thumbnail)
+            thumbnail = provideThumbnail(dto.thumbnail),
+            comicsUri = provideComicsName(dto.comics.items)
         )
 
     fun mapDbModelToEntity(dbModel: CharacterDbModel): Character =
@@ -37,12 +40,13 @@ class CharacterMapper {
             thumbnail = dbModel.thumbnail
         )
 
-    fun mapDbInfoModelToEntity(dbModel: CharacterInfoDbModel): Character =
-        Character(
+    fun mapDbInfoModelToEntity(dbModel: CharacterInfoDbModel): CharacterInfo =
+        CharacterInfo(
             name = dbModel.name,
             id = dbModel.id,
             modified = dbModel.modified,
-            thumbnail = dbModel.thumbnail
+            thumbnail = dbModel.thumbnail,
+            comicsUri = dbModel.comicsUri
         )
 
 
@@ -54,6 +58,14 @@ class CharacterMapper {
             result.add(res)
         }
         return result
+    }
+
+    private fun provideComicsName(items: List<Item>): List<String> {
+        val namesList = mutableListOf<String>()
+        items.forEach {
+            namesList.add(it.name)
+        }
+        return namesList
     }
 
     private fun convertStringToTimestamp(date: String): String {
