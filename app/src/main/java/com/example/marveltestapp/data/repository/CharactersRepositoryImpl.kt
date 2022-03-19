@@ -1,12 +1,12 @@
 package com.example.marveltestapp.data.repository
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
 import com.example.marveltestapp.data.database.CharactersDao
 import com.example.marveltestapp.data.mapper.CharacterMapper
 import com.example.marveltestapp.data.network.ApiFactory
 import com.example.marveltestapp.domain.Character
+import com.example.marveltestapp.domain.CharacterInfo
 import com.example.marveltestapp.domain.CharactersRepository
 
 class CharactersRepositoryImpl(
@@ -39,11 +39,10 @@ class CharactersRepositoryImpl(
         }
     }
 
-    override fun getCharacterById(id: Int): LiveData<Character> {
+    override fun getCharacterById(id: Int): LiveData<CharacterInfo> {
         val character = charactersDao.getCharacter(id)
         return Transformations.map(character) {
             mapper.mapDbInfoModelToEntity(it)
         }
     }
-
 }

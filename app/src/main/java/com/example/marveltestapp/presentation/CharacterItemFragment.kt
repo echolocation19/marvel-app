@@ -1,21 +1,17 @@
 package com.example.marveltestapp.presentation
 
+import android.content.Context
+import android.graphics.Insets
 import android.os.Bundle
+import android.view.*
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import com.example.marveltestapp.databinding.FragmentCharacterItemBinding
-import com.example.marveltestapp.domain.Character
+import com.example.marveltestapp.domain.CharacterInfo
 import com.example.marveltestapp.presentation.viewmodel.CharacterViewModel
 import com.example.marveltestapp.presentation.viewmodel.CharacterViewModelFactory
-import com.example.marveltestapp.presentation.viewmodel.CharactersViewModel
-import com.example.marveltestapp.presentation.viewmodel.CharactersViewModelFactory
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.withContext
-import java.lang.RuntimeException
+import com.squareup.picasso.Picasso
+
 
 class CharacterItemFragment : Fragment() {
 
@@ -44,13 +40,32 @@ class CharacterItemFragment : Fragment() {
         characterViewModel.getCharacter().observe(viewLifecycleOwner) {
             setCharacterInfo(it)
         }
-
     }
 
-    private fun setCharacterInfo(character: Character) {
-        with (binding) {
+    private fun setCharacterInfo(character: CharacterInfo) {
+        val listDisplay = getListDisplay()
+        with(binding) {
             tvName.text = character.name
+            Picasso.get().load(character.thumbnail)
+                .resize(listDisplay[0], listDisplay[1])
+                .into(ivSuperhero)
+            tvComicsName.text = character.comicsUri[0]
         }
+    }
+
+    private fun getListDisplay(): List<Int> {
+        val windowManager: WindowManager =
+            context?.getSystemService(Context.WINDOW_SERVICE) as WindowManager
+        val metrics: WindowMetrics = windowManager.currentWindowMetrics
+        val windowInsets = metrics.windowInsets
+        val insets: Insets = windowInsets.getInsetsIgnoringVisibility(
+            WindowInsets.Type.navigationBars()
+                    or WindowInsets.Type.displayCutout()
+        )
+
+        val insetsWidth: Int = insets.right + insets.left
+        val insetsHeight: Int = insets.top + insets.bottom
+        return listOf(insetsWidth, insetsHeight)
     }
 
     private fun getCharacterId(): Int =

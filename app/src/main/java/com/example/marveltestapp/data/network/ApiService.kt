@@ -28,13 +28,12 @@ interface ApiService {
             getHashParam(tsInfoProperty)
     ): CharactersContainerDto
 
-
     companion object {
         private const val QUERY_PARAM_API_KEY = "apikey"
-        private const val PATH_PARAM_CHARACTER_ID = "id"
         private const val QUERY_PARAM_TS = "ts"
         private const val QUERY_PARAM_HASH = "hash"
         private const val QUERY_PARAM_LIMIT = "limit"
+        private const val PATH_PARAM_CHARACTER_ID = "id"
         private const val PARAM_LIMIT = "100"
 
         private val tsProperty by lazy {

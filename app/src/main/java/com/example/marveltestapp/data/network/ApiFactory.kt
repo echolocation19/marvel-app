@@ -2,7 +2,6 @@ package com.example.marveltestapp.data.network
 
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import java.lang.RuntimeException
 
 object ApiFactory {
 
