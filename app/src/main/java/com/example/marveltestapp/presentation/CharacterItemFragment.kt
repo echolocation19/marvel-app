@@ -3,12 +3,15 @@ package com.example.marveltestapp.presentation
 import android.content.Context
 import android.os.Build
 import android.os.Bundle
+import android.util.DisplayMetrics
+import android.util.Log
 import android.view.*
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.marveltestapp.databinding.FragmentCharacterItemBinding
 import com.example.marveltestapp.domain.CharacterInfo
+import com.example.marveltestapp.presentation.adapters.CharacterItemsAdapter
 import com.example.marveltestapp.presentation.adapters.Comics
 import com.example.marveltestapp.presentation.adapters.ComicsAdapter
 import com.example.marveltestapp.presentation.viewmodel.CharacterViewModel
@@ -62,16 +65,11 @@ class CharacterItemFragment : Fragment() {
         val mAdapter = ComicsAdapter(modelList)
         with(binding.rvComics) {
             adapter = mAdapter
-            layoutParams.height = getRecyclerViewResolution()
+            recycledViewPool.setMaxRecycledViews(
+                ComicsAdapter.VIEW_TYPE,
+                ComicsAdapter.MAX_POOL_SIZE
+            )
         }
-    }
-
-    @RequiresApi(Build.VERSION_CODES.R)
-    private fun getRecyclerViewResolution(): Int {
-        val windowManager: WindowManager =
-            context?.getSystemService(Context.WINDOW_SERVICE) as WindowManager
-        val metrics: WindowMetrics = windowManager.currentWindowMetrics
-        return (metrics.bounds.bottom * 0.9).toInt()
     }
 
     private fun getCharacterId(): Int =
