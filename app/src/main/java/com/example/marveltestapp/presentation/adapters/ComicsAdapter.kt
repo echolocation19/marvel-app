@@ -10,6 +10,11 @@ class ComicsAdapter(
 ) :
     RecyclerView.Adapter<ComicsAdapter.ComicsViewHolder>() {
 
+    companion object {
+        const val VIEW_TYPE = 0
+        const val MAX_POOL_SIZE = 10
+    }
+
     class ComicsViewHolder(val binding: ComicsItemBinding) :
         RecyclerView.ViewHolder(binding.root)
 
