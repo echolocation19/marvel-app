@@ -1,13 +1,16 @@
 package com.example.marveltestapp.presentation
 
 import android.content.Context
-import android.graphics.Insets
+import android.os.Build
 import android.os.Bundle
 import android.view.*
+import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.marveltestapp.databinding.FragmentCharacterItemBinding
 import com.example.marveltestapp.domain.CharacterInfo
+import com.example.marveltestapp.presentation.adapters.Comics
+import com.example.marveltestapp.presentation.adapters.ComicsAdapter
 import com.example.marveltestapp.presentation.viewmodel.CharacterViewModel
 import com.example.marveltestapp.presentation.viewmodel.CharacterViewModelFactory
 import com.squareup.picasso.Picasso
@@ -43,29 +46,32 @@ class CharacterItemFragment : Fragment() {
     }
 
     private fun setCharacterInfo(character: CharacterInfo) {
-        val listDisplay = getListDisplay()
         with(binding) {
             tvName.text = character.name
             Picasso.get().load(character.thumbnail)
-                .resize(listDisplay[0], listDisplay[1])
+                .resize(IMAGE_SIZE, IMAGE_SIZE)
                 .into(ivSuperhero)
-            tvComicsName.text = character.comicsUri[0]
+        }
+        setupRecyclerView(character.comicsUri)
+    }
+
+    private fun setupRecyclerView(comicsList: List<String>) {
+        val modelList = comicsList.map {
+            Comics(content = it)
+        }
+        val mAdapter = ComicsAdapter(modelList)
+        with(binding.rvComics) {
+            adapter = mAdapter
+            layoutParams.height = getRecyclerViewResolution()
         }
     }
 
-    private fun getListDisplay(): List<Int> {
+    @RequiresApi(Build.VERSION_CODES.R)
+    private fun getRecyclerViewResolution(): Int {
         val windowManager: WindowManager =
             context?.getSystemService(Context.WINDOW_SERVICE) as WindowManager
         val metrics: WindowMetrics = windowManager.currentWindowMetrics
-        val windowInsets = metrics.windowInsets
-        val insets: Insets = windowInsets.getInsetsIgnoringVisibility(
-            WindowInsets.Type.navigationBars()
-                    or WindowInsets.Type.displayCutout()
-        )
-
-        val insetsWidth: Int = insets.right + insets.left
-        val insetsHeight: Int = insets.top + insets.bottom
-        return listOf(insetsWidth, insetsHeight)
+        return (metrics.bounds.bottom * 0.9).toInt()
     }
 
     private fun getCharacterId(): Int =
@@ -77,7 +83,7 @@ class CharacterItemFragment : Fragment() {
     }
 
     companion object {
-
+        private const val IMAGE_SIZE = 100
         private const val CHARACTER_ITEM_ID = "id"
         private const val CHARACTER_EMPTY_ID = 0
 
