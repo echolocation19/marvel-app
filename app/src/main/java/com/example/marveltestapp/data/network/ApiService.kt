@@ -50,7 +50,6 @@ interface ApiService {
             MessageDigest.getInstance("MD5").digest(str.toByteArray(UTF_8))
 
         private fun getHashParam(ts: String) = md5("${ts}${BuildConfig.API_PRIVATE_KEY}${BuildConfig.API_PUBLIC_KEY}").toHex()
-
     }
 
 }
