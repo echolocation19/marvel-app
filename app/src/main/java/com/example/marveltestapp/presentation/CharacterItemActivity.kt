@@ -26,8 +26,9 @@ class CharacterItemActivity : AppCompatActivity() {
         }
     }
 
-    private fun getCharacterId(): Int =
-        intent.getIntExtra(EXTRA_CHARACTER_ID, CHARACTER_EMPTY_ID)
+    private fun getCharacterId(): Int {
+        return intent.getIntExtra(EXTRA_CHARACTER_ID, CHARACTER_EMPTY_ID)
+    }
 
 
     companion object {

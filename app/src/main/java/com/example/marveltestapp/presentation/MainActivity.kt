@@ -11,7 +11,7 @@ import com.example.marveltestapp.presentation.viewmodel.CharactersViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class MainActivity : AppCompatActivity() {
+class MainActivity: AppCompatActivity() {
 
     private var _binding: ActivityMainBinding? = null
     private val binding: ActivityMainBinding

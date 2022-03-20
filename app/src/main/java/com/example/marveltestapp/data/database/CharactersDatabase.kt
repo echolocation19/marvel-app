@@ -10,7 +10,7 @@ import com.example.marveltestapp.data.database.entity.CharacterInfoDbModel
 
 @Database(
     entities = [CharacterDbModel::class, CharacterInfoDbModel::class],
-    version = 10,
+    version = 11,
     exportSchema = false
 )
 @TypeConverters(TypeConverter::class)
