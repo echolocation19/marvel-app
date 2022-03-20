@@ -31,9 +31,8 @@ class CharacterItemFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val id = getCharacterId()
-        characterViewModel.loadCharacter(id)
-        characterViewModel.getCharacter(id).observe(viewLifecycleOwner) {
+        characterViewModel.loadCharacter(getCharacterId())
+        characterViewModel.getCharacter(getCharacterId()).observe(viewLifecycleOwner) {
             setCharacterInfo(it)
         }
     }
@@ -62,8 +61,9 @@ class CharacterItemFragment : Fragment() {
         }
     }
 
-    private fun getCharacterId(): Int =
-        requireArguments().getInt(CHARACTER_ITEM_ID, CHARACTER_EMPTY_ID)
+    private fun getCharacterId(): Int {
+        return requireArguments().getInt(CHARACTER_ITEM_ID, CHARACTER_EMPTY_ID)
+    }
 
     override fun onDestroy() {
         super.onDestroy()

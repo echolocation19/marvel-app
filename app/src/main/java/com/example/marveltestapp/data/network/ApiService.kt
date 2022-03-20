@@ -17,6 +17,8 @@ interface ApiService {
         @Query(QUERY_PARAM_HASH) hash: String =
             getHashParam(tsProperty),
         @Query(QUERY_PARAM_LIMIT) limit: String = PARAM_LIMIT,
+        @Query(QUERY_PARAM_ORDER_BY) orderBy: String = PARAM_ORDER_BY,
+        @Query(QUERY_PARAM_OFFSET) offset: String = getRandomOffset(),
     ): CharactersContainerDto
 
     @GET("/v1/public/characters/{id}")
@@ -33,8 +35,15 @@ interface ApiService {
         private const val QUERY_PARAM_TS = "ts"
         private const val QUERY_PARAM_HASH = "hash"
         private const val QUERY_PARAM_LIMIT = "limit"
+        private const val QUERY_PARAM_ORDER_BY = "orderBy"
+        private const val QUERY_PARAM_OFFSET = "offset"
+        private const val PARAM_ORDER_BY = "-modified"
         private const val PATH_PARAM_CHARACTER_ID = "id"
-        private const val PARAM_LIMIT = "100"
+        private const val PARAM_LIMIT = "10"
+
+        private fun getRandomOffset(): String {
+            return (0..1000).random().toString()
+        }
 
         private val tsProperty by lazy {
             System.currentTimeMillis().toString()

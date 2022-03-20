@@ -1,5 +1,6 @@
 package com.example.marveltestapp.di
 
+import android.app.Application
 import android.content.Context
 import com.example.marveltestapp.data.database.CharactersDao
 import com.example.marveltestapp.data.database.CharactersDatabase
@@ -7,6 +8,7 @@ import com.example.marveltestapp.data.mapper.CharacterMapper
 import com.example.marveltestapp.data.network.ApiFactory
 import com.example.marveltestapp.data.network.ApiService
 import com.example.marveltestapp.data.repository.CharactersRepositoryImpl
+import com.example.marveltestapp.data.worker.RefreshDataWorkerFactory
 import com.example.marveltestapp.domain.CharactersRepository
 import dagger.Module
 import dagger.Provides
@@ -43,9 +45,25 @@ class DataModule {
     fun provideCharactersRepository(
         characterMapper: CharacterMapper,
         apiService: ApiService,
-        charactersDao: CharactersDao
+        charactersDao: CharactersDao,
+        application: Application
     ): CharactersRepository {
-        return CharactersRepositoryImpl(characterMapper, apiService, charactersDao)
+        return CharactersRepositoryImpl(characterMapper, apiService, charactersDao, application)
     }
+
+    @Provides
+    @Singleton
+    fun provideWorkerFactory(
+        charactersDao: CharactersDao,
+        apiService: ApiService,
+        mapper: CharacterMapper
+    ): RefreshDataWorkerFactory {
+        return RefreshDataWorkerFactory(
+            charactersDao,
+            apiService,
+            mapper
+        )
+    }
+
 
 }

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.example.marveltestapp">
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -14,8 +15,8 @@
         android:theme="@style/Theme.MarvelTestApp">
         <activity
             android:name=".presentation.CharacterItemActivity"
-            android:parentActivityName=".presentation.MainActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:parentActivityName=".presentation.MainActivity" />
         <activity
             android:name=".presentation.MainActivity"
             android:exported="true">
@@ -25,6 +26,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <provider
+            android:name="androidx.startup.InitializationProvider"
+            android:authorities="androidx.work.WorkManagerInitializer"
+            tools:node="remove"
+            tools:replace="android:authorities" />
     </application>
 
 </manifest>
