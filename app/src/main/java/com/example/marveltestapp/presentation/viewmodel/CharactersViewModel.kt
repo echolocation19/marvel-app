@@ -1,29 +1,27 @@
 package com.example.marveltestapp.presentation.viewmodel
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.marveltestapp.data.database.CharactersDatabase
-import com.example.marveltestapp.data.repository.CharactersRepositoryImpl
-import com.example.marveltestapp.domain.GetCharactersListUseCase
+import com.example.marveltestapp.domain.*
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class CharactersViewModel(
-    application: Application
-) : AndroidViewModel(application) {
-
-    private val db = CharactersDatabase.getInstance(application)
-    private val dao = db.charactersDao()
-    private val repository = CharactersRepositoryImpl(dao)
-
-    private val getCharactersListUseCase = GetCharactersListUseCase(repository)
+@HiltViewModel
+class CharactersViewModel @Inject constructor(
+    private val getCharactersListUseCase: GetCharactersListUseCase,
+    private val loadCharactersListUseCase: LoadCharactersListUseCase,
+    private val getCharacterByIdUseCase: GetCharacterByIdUseCase,
+    private val loadCharacterByIdUseCase: LoadCharacterByIdUseCase
+) : ViewModel() {
 
     init {
         viewModelScope.launch(Dispatchers.IO) {
-            repository.loadData()
+            loadCharactersListUseCase.invoke()
         }
     }
 
-    val charactersList = getCharactersListUseCase()
+    val charactersList = getCharactersListUseCase.invoke()
 }

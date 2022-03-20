@@ -1,23 +1,17 @@
 package com.example.marveltestapp.presentation
 
-import android.content.Context
-import android.os.Build
 import android.os.Bundle
-import android.util.DisplayMetrics
-import android.util.Log
-import android.view.*
-import androidx.annotation.RequiresApi
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.activityViewModels
 import com.example.marveltestapp.databinding.FragmentCharacterItemBinding
 import com.example.marveltestapp.domain.CharacterInfo
-import com.example.marveltestapp.presentation.adapters.CharacterItemsAdapter
 import com.example.marveltestapp.presentation.adapters.Comics
 import com.example.marveltestapp.presentation.adapters.ComicsAdapter
 import com.example.marveltestapp.presentation.viewmodel.CharacterViewModel
-import com.example.marveltestapp.presentation.viewmodel.CharacterViewModelFactory
 import com.squareup.picasso.Picasso
-
 
 class CharacterItemFragment : Fragment() {
 
@@ -25,13 +19,7 @@ class CharacterItemFragment : Fragment() {
     private val binding: FragmentCharacterItemBinding
         get() = _binding ?: throw RuntimeException("FragmentCharacterItemBinding == null")
 
-    private val characterViewModelFactory by lazy {
-        CharacterViewModelFactory(requireActivity().application, getCharacterId())
-    }
-
-    private val characterViewModel by lazy {
-        ViewModelProvider(this, characterViewModelFactory)[CharacterViewModel::class.java]
-    }
+    private val characterViewModel: CharacterViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -43,7 +31,9 @@ class CharacterItemFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        characterViewModel.getCharacter().observe(viewLifecycleOwner) {
+        val id = getCharacterId()
+        characterViewModel.loadCharacter(id)
+        characterViewModel.getCharacter(id).observe(viewLifecycleOwner) {
             setCharacterInfo(it)
         }
     }

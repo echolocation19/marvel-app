@@ -1,16 +1,16 @@
 package com.example.marveltestapp.presentation
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
 import com.example.marveltestapp.R
 import com.example.marveltestapp.databinding.ActivityMainBinding
 import com.example.marveltestapp.presentation.adapters.CharacterItemsAdapter
 import com.example.marveltestapp.presentation.viewmodel.CharactersViewModel
-import com.example.marveltestapp.presentation.viewmodel.CharactersViewModelFactory
-import java.lang.RuntimeException
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
     private var _binding: ActivityMainBinding? = null
@@ -21,13 +21,7 @@ class MainActivity : AppCompatActivity() {
     private val characterListAdapter: CharacterItemsAdapter
         get() = _characterListAdapter ?: throw RuntimeException("CharacterItemsAdapter == null")
 
-    private val viewModelFactory by lazy {
-        CharactersViewModelFactory(application)
-    }
-
-    private val viewModel by lazy {
-        ViewModelProvider(this, viewModelFactory)[CharactersViewModel::class.java]
-    }
+    private val viewModel: CharactersViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

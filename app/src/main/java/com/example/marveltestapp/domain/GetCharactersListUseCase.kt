@@ -1,9 +1,12 @@
 package com.example.marveltestapp.domain
 
-class GetCharactersListUseCase(
+import androidx.lifecycle.LiveData
+import javax.inject.Inject
+
+class GetCharactersListUseCase @Inject constructor(
     private val repository: CharactersRepository
 ) {
 
-    operator fun invoke() =
+    operator fun invoke(): LiveData<List<Character>> =
         repository.getCharactersList()
 }
