@@ -8,10 +8,12 @@ import androidx.work.WorkManager
 import com.example.marveltestapp.data.database.CharactersDao
 import com.example.marveltestapp.data.mapper.CharacterMapper
 import com.example.marveltestapp.data.network.ApiService
+import com.example.marveltestapp.data.network.model.CharactersContainerDto
 import com.example.marveltestapp.data.worker.RefreshDataWorker
 import com.example.marveltestapp.domain.Character
 import com.example.marveltestapp.domain.CharacterInfo
 import com.example.marveltestapp.domain.CharactersRepository
+import kotlinx.coroutines.*
 import javax.inject.Inject
 
 class CharactersRepositoryImpl @Inject constructor(
@@ -30,17 +32,32 @@ class CharactersRepositoryImpl @Inject constructor(
         }
     }
 
-    override fun getCharacterById(id: Int): LiveData<CharacterInfo> {
-        return Transformations.map(charactersDao.getCharacter(id)) {
-            mapper.mapDbInfoModelToEntity(it)
+    override suspend fun getCharacterById(id: Int): CharacterInfo {
+        val character = withContext(Dispatchers.IO) {
+            charactersDao.getCharacter(id)
         }
+        return mapper.mapDbInfoModelToEntity(character)
     }
 
-    override suspend fun loadCharacterById(id: Int) {
-        val dto = apiService.getCharacterById(id)
-        val character = mapper.mapCharactersContainerToListResult(dto)
-        val result = character.map { mapper.mapDtoToDbInfoModel(it) }
-        charactersDao.insertCharacter(result[0])
+    override suspend fun loadCharacterById(id: Int, scope: CoroutineScope) {
+        scope.launch {
+            try {
+                var dto: CharactersContainerDto = async(Dispatchers.IO) {
+                        apiService.getCharacterById(id)
+                }.await()
+                var character = async(Dispatchers.Default) {
+                        mapper.mapCharactersContainerToListResult(dto)
+                }.await()
+                val result = async(Dispatchers.Default) {
+                        character.map { mapper.mapDtoToDbInfoModel(it) }
+                }.await()
+                withContext(Dispatchers.IO) {
+                    charactersDao.insertCharacter(result[0])
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }.join()
     }
 
     override fun loadCharactersList() {

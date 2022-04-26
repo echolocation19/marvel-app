@@ -1,10 +1,11 @@
 package com.example.marveltestapp.domain
 
 import androidx.lifecycle.LiveData
+import kotlinx.coroutines.CoroutineScope
 
 interface CharactersRepository {
     fun getCharactersList(): LiveData<List<Character>>
-    fun getCharacterById(id: Int): LiveData<CharacterInfo>
+    suspend fun getCharacterById(id: Int): CharacterInfo
     fun loadCharactersList(): Unit
-    suspend fun loadCharacterById(id: Int)
+    suspend fun loadCharacterById(id: Int, scope: CoroutineScope)
 }
