@@ -49,17 +49,6 @@ class CharacterMapper {
             comicsUri = dbModel.comicsUri
         )
 
-    fun mapDbModelToInfoDbModel(dbModel: CharacterDbModel): CharacterInfoDbModel =
-        CharacterInfoDbModel(
-            name = dbModel.name,
-            id = dbModel.id,
-            modified = dbModel.modified,
-            thumbnail = dbModel.thumbnail,
-            comicsUri = dbModel.comicsUri
-        )
-
-
-
     fun mapCharactersContainerToListResult(container: CharactersContainerDto)
             : List<ResultDto> {
         val result = mutableListOf<ResultDto>()

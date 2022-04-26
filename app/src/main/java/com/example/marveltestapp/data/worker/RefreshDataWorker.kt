@@ -21,7 +21,9 @@ class RefreshDataWorker(
     override suspend fun doWork(): Result {
         while (true) {
             try {
-                val dto =  apiService.getAllCharacters()
+                charactersDao.removeCharactersList()
+                charactersDao.removeCharacter()
+                val dto = apiService.getAllCharacters()
                 val charactersList = mapper.mapCharactersContainerToListResult(dto)
                 val resultList = charactersList.map { mapper.mapDtoToDbModel(it) }
                 charactersDao.insertCharactersList(resultList)

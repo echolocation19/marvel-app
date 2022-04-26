@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.example.marveltestapp.databinding.FragmentCharacterItemBinding
@@ -11,6 +12,7 @@ import com.example.marveltestapp.domain.CharacterInfo
 import com.example.marveltestapp.presentation.adapters.Comics
 import com.example.marveltestapp.presentation.adapters.ComicsAdapter
 import com.example.marveltestapp.presentation.viewmodel.CharacterViewModel
+import com.example.marveltestapp.presentation.viewmodel.UiState
 import com.squareup.picasso.Picasso
 
 class CharacterItemFragment : Fragment() {
@@ -31,9 +33,25 @@ class CharacterItemFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        characterViewModel.loadCharacter(getCharacterId())
-        characterViewModel.getCharacter(getCharacterId()).observe(viewLifecycleOwner) {
-            setCharacterInfo(it)
+        characterViewModel.getCharacter(getCharacterId())
+        characterViewModel.uiState().observe(viewLifecycleOwner) { uiState ->
+            if (uiState != null) {
+                render(uiState)
+            }
+        }
+    }
+
+    private fun render(uiState: UiState) {
+        when (uiState) {
+            is UiState.Loading -> {  }
+            is UiState.Success -> {
+                setCharacterInfo(uiState.characterInfo)
+                println(uiState.characterInfo.name)
+            }
+            is UiState.Error -> {
+                Toast.makeText(context, uiState.message, Toast.LENGTH_LONG)
+                    .show()
+            }
         }
     }
 
